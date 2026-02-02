@@ -57,7 +57,7 @@
     "option.ImportBluePrints.inputs.ImportBluePrintsText.label": "蓝图文本",
     "option.ImportBluePrints.inputs.ImportBluePrintsText.description": "请输入文本，可以夹杂任意字符，将智能拆分蓝图分享码",
     "task.DeliveryJobs.label": "🚚自动转交送货任务",
-    "task.DeliveryJobs.description": "自动接取并转交送货任务，**可在主界面和地区建设页面开始任务**。\n请需要启用的地区：",
+    "task.DeliveryJobs.description": "自动接取并转交送货任务，**可在主界面和地区建设页面开始任务**。\n请选择需要启用的地区：",
     "task.ClaimSimulationRewards.label": "📦自动领取模拟空间奖励",
     "task.ClaimSimulationRewards.description": "请在模拟空间菜单内启动",
     "task.ClaimSimulationRewards.error_not_found": "未检测到[模拟空间]界面，请手动切换",
