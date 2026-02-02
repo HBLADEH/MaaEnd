@@ -39,7 +39,6 @@
         "key": 89,
         "next": []
     },
-    // 检查当前地区并决定从哪里开始转交委托
     "CheckCurrentArea": {
         "doc": "检查当前地区",
         "recognition": "TemplateMatch",
