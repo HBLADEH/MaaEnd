@@ -45,7 +45,6 @@
             27
         ],
         "threshold": 0.8,
-        "action": "Click",
-        "next": []
+        "action": "Click"
     }
 }
