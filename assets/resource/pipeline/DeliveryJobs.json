@@ -2,7 +2,6 @@
     "DeliveryJobsMain": {
         "doc": "开始自动转交运送委托",
         "next": [
-            "ClickScreenToContinue",
             "FillCargoToMax",
             "ClickTransferJob",
             "EnterDeliveryJob",
@@ -122,9 +121,28 @@
         "threshold": 0.8,
         "action": "Click",
         "next": [
+            "ContainerHasOffer",
             "EnterCargoContainer",
             "ContainerNotReadyGoWuling",
             "EnterDepot"
+        ]
+    },
+    // 有人报价
+    "ContainerHasOffer": {
+        "doc": "货物集装箱有人报价",
+        "recognition": "TemplateMatch",
+        "template": "DeliveryJobs/ContainerHasOffer.png",
+        "roi": [
+            97,
+            518,
+            964,
+            24
+        ],
+        "threshold": 0.8,
+        "action": "Click",
+        "next": [
+            "ProceedToNextStep",
+            "ContainerHasOffer"
         ]
     },
     "ContainerNotReadyGoWuling": {
@@ -191,6 +209,7 @@
         "threshold": 0.8,
         "action": "Click",
         "next": [
+            "CargoContainerBid",
             "FillCargoToMax",
             "ClickScreenToContinue",
             "ProceedToNextStep"
@@ -213,6 +232,23 @@
             "FillCargoToMax"
         ]
     },
+    "CargoContainerBid": {
+        "doc": "货物集装箱竞价",
+        "recognition": "TemplateMatch",
+        "template": "DeliveryJobs/BidCargoContainer.png",
+        "roi": [
+            906,
+            589,
+            42,
+            45
+        ],
+        "threshold": 0.8,
+        "action": "Click",
+        "next": [
+            "ProceedToNextStep",
+            "CargoContainerBid"
+        ]
+    },
     "ClickScreenToContinue": {
         "doc": "单击屏幕继续",
         "recognition": "TemplateMatch",
@@ -227,8 +263,7 @@
         "action": "Click",
         "next": [
             "EnterDeliveryJob",
-            "ClickScreenToContinue",
-            "DeliveryJobsMain"
+            "ClickScreenToContinue"
         ]
     },
     "EnterDeliveryJob": {
@@ -277,6 +312,16 @@
             27
         ],
         "threshold": 0.8,
+        // 任务转交之后，回到主界面任务还需要时间才会消失
+        "post_wait_freezes": {
+            "time": 1000,
+            "target": [
+                21,
+                174,
+                231,
+                81
+            ]
+        },
         "action": "Click",
         "next": [
             "ConfirmTaskTransfer",
