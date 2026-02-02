@@ -1,19 +1,11 @@
 {
+    // 自动转交运送委托
+    // 仅允许从大世界或者地区建设页面启动
     "DeliveryJobsMain": {
         "doc": "开始自动转交运送委托",
         "next": [
             "CheckCurrentArea",
-            "EnterRegionalConstruction",
-            "ReturnToWorld"
-        ]
-    },
-    "ReturnToWorld": {
-        "doc": "不在在大世界，不断按ESC进入大世界",
-        "recognition": "DirectHit",
-        "action": "ClickKey",
-        "key": 27,
-        "next": [
-            "DeliveryJobsMain"
+            "[JumpBack]EnterRegionalConstruction"
         ]
     },
     "EnterRegionalConstruction": {
@@ -45,11 +37,9 @@
         ],
         "action": "ClickKey",
         "key": 89,
-        "next": [
-            "CheckCurrentArea",
-            "EnterRegionalConstruction"
-        ]
+        "next": []
     },
+    // 检查当前地区并决定从哪里开始转交委托
     "CheckCurrentArea": {
         "doc": "检查当前地区",
         "recognition": "TemplateMatch",
@@ -63,254 +53,35 @@
         ],
         "action": "DoNothing",
         "next": [
-            "EnterMgmtInFourthValley",
-            "EnterFourthValleyFromWuling",
-            "CheckCurrentArea"
+            "DeliveryJobsFourthValley",
+            "DeliveryJobsWuling",
+            "DeliveryJobsFinished"
         ]
     },
-    "EnterMgmtInFourthValley": {
-        "doc": "在四号谷地，进入地区建设管理",
-        "recognition": "OCR",
-        "order_by": "Expected",
-        "roi": [
-            25,
-            174,
-            178,
-            48
-        ],
-        "expected": "四号谷地",
-        "threshold": 0.8,
-        "action": "DoNothing",
+    "DeliveryJobsFourthValley": {
+        "doc": "四号谷地运送委托",
+        "max_hit": 1,
         "next": [
-            "EnterDepot",
-            "CheckCurrentArea"
+            "CheckDepotLocked",
+            "[JumpBack]EnterFourthValleyDepot",
+            "[JumpBack]EnterDeliveryJob",
+            "[JumpBack]DeliveryJobsGoToFourthValley",
+            "[JumpBack]EnterRegionalConstruction"
         ]
     },
-    "EnterFourthValleyFromWuling": {
-        "doc": "直接在武陵，进入四号谷地",
-        "recognition": "OCR",
-        "order_by": "Expected",
-        "roi": [
-            25,
-            174,
-            178,
-            48
-        ],
-        "expected": "武陵",
-        "threshold": 0.8,
-        "action": "DoNothing",
+    "DeliveryJobsWuling": {
+        "doc": "武陵运送委托",
+        "max_hit": 1,
         "next": [
-            "DeliveryJobsWuling2FourthValley",
-            "CheckCurrentArea"
+            "EnterWuLingDepot",
+            "[JumpBack]CheckDepotLocked",
+            "[JumpBack]EnterDeliveryJob",
+            "[JumpBack]DeliveryJobsGoToWuLing",
+            "[JumpBack]EnterRegionalConstruction"
         ]
     },
-    "EnterDepot": {
-        "doc": "进入仓储节点",
-        "recognition": "TemplateMatch",
-        "template": "DeliveryJobs/EnterDepot.png",
-        "roi": [
-            1016,
-            343,
-            22,
-            19
-        ],
-        "threshold": 0.8,
-        "action": "Click",
-        "next": [
-            "ContainerHasOffer",
-            "EnterCargoContainer",
-            "ContainerNotReadyGoWuling",
-            "EnterDepot"
-        ]
-    },
-    "ContainerHasOffer": {
-        "doc": "货物集装箱有人报价",
-        "recognition": "TemplateMatch",
-        "template": "DeliveryJobs/ContainerHasOffer.png",
-        "roi": [
-            97,
-            518,
-            964,
-            24
-        ],
-        "threshold": 0.8,
-        "action": "Click",
-        "next": [
-            "ProceedToNextStep",
-            "ContainerHasOffer"
-        ]
-    },
-    "ContainerNotReadyGoWuling": {
-        "doc": "货物集装箱未就绪，去武陵",
-        "recognition": "TemplateMatch",
-        "template": "DeliveryJobs/DepotNotReady.png",
-        "roi": [
-            109,
-            515,
-            940,
-            30
-        ],
-        "threshold": 0.8,
-        "action": "ClickKey",
-        "key": 27,
-        "next": [
-            "DeliveryJobsChangeNextRegion",
-            "ContainerNotReadyGoWuling"
-        ]
-    },
-    "EnterCargoContainer": {
-        "doc": "进入货物集装箱",
-        "recognition": "Or",
-        "any_of": [
-            {
-                "recognition": "TemplateMatch",
-                "template": "DeliveryJobs/DepotReady.png",
-                "roi": [
-                    109,
-                    515,
-                    940,
-                    30
-                ],
-                "threshold": 0.8
-            },
-            {
-                "recognition": "TemplateMatch",
-                "template": "DeliveryJobs/DepotReadyWuLing.png",
-                "roi": [
-                    109,
-                    515,
-                    940,
-                    30
-                ],
-                "threshold": 0.8
-            }
-        ],
-        "action": "Click",
-        "next": [
-            "ProceedToNextStep",
-            "EnterCargoContainer"
-        ]
-    },
-    "ProceedToNextStep": {
-        "doc": "进入下一步",
-        "recognition": "TemplateMatch",
-        "template": "DeliveryJobs/NextStep.png",
-        "roi": [
-            1209,
-            649,
-            29,
-            28
-        ],
-        "threshold": 0.8,
-        "action": "Click",
-        "next": [
-            "CargoContainerBid",
-            "FillCargoToMax",
-            "ClickScreenToContinue",
-            "ProceedToNextStep"
-        ]
-    },
-    "FillCargoToMax": {
-        "doc": "装满货物",
-        "recognition": "TemplateMatch",
-        "template": "DeliveryJobs/FillToMax.png",
-        "roi": [
-            1174,
-            172,
-            34,
-            19
-        ],
-        "threshold": 0.8,
-        "action": "Click",
-        "next": [
-            "ProceedToNextStep",
-            "FillCargoToMax"
-        ]
-    },
-    "CargoContainerBid": {
-        "doc": "货物集装箱竞价",
-        "recognition": "TemplateMatch",
-        "template": "DeliveryJobs/BidCargoContainer.png",
-        "roi": [
-            906,
-            589,
-            42,
-            45
-        ],
-        "threshold": 0.8,
-        "action": "Click",
-        "next": [
-            "ProceedToNextStep",
-            "CargoContainerBid"
-        ]
-    },
-    "ClickScreenToContinue": {
-        "doc": "单击屏幕继续",
-        "recognition": "TemplateMatch",
-        "template": "DeliveryJobs/ClickToContinue.png",
-        "roi": [
-            578,
-            670,
-            122,
-            24
-        ],
-        "threshold": 0.8,
-        "action": "Click",
-        "next": [
-            "EnterDeliveryJob",
-            "ClickScreenToContinue"
-        ]
-    },
-    "EnterDeliveryJob": {
-        "doc": "进入送货任务",
-        "recognition": "TemplateMatch",
-        "template": "DeliveryJobs/EnterDeliveryJob.png",
-        "roi": [
-            58,
-            176,
-            68,
-            23
-        ],
-        "threshold": 0.8,
-        "action": "ClickKey",
-        "key": 74,
-        "next": [
-            "ClickTransferJob",
-            "EnterDeliveryJob"
-        ]
-    },
-    "ClickTransferJob": {
-        "doc": "单击转交任务",
-        "recognition": "TemplateMatch",
-        "template": "DeliveryJobs/TransferTask.png",
-        "roi": [
-            436,
-            653,
-            88,
-            15
-        ],
-        "threshold": 0.8,
-        "action": "Click",
-        "next": [
-            "ConfirmTaskTransfer",
-            "ClickTransferJob"
-        ]
-    },
-    "ConfirmTaskTransfer": {
-        "doc": "确认转交任务",
-        "recognition": "TemplateMatch",
-        "template": "DeliveryJobs/ConfirmTransfer.png",
-        "roi": [
-            818,
-            450,
-            27,
-            27
-        ],
-        "threshold": 0.8,
-        "action": "Click",
-        "next": [
-            "ConfirmTaskTransfer",
-            "DeliveryJobsMain"
-        ]
+    "DeliveryJobsFinished": {
+        "doc": "运送委托完成",
+        "next": []
     }
 }
