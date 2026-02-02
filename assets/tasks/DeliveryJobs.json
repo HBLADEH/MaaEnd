@@ -20,6 +20,7 @@
         "FourthValley": {
             "type": "switch",
             "label": "$common.in-game.region.FourthValley",
+            "default_case": "Yes",
             "cases": [
                 {
                     "name": "Yes",
@@ -42,6 +43,7 @@
         "Wuling": {
             "type": "switch",
             "label": "$common.in-game.region.WuLing",
+            "default_case": "Yes",
             "cases": [
                 {
                     "name": "Yes",
