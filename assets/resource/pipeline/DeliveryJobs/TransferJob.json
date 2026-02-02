@@ -45,6 +45,9 @@
             27
         ],
         "threshold": 0.8,
-        "action": "Click"
+        "action": "Click",
+        "next": [
+            "DeliveryJobsMain"
+        ] // 这里算作一次转交的结束，回头把
     }
 }
